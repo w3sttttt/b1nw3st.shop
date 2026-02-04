@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<title>binwest</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<style>
+* { box-sizing: border-box; }
+
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background: #0b0b0b;
+    color: #f5f5f5;
+}
+
+/* HEADER */
+header {
+    background: #000;
+    padding: 20px;
+    text-align: center;
+    border-bottom: 2px solid #b30000;
+    box-shadow: 0 0 20px rgba(225,6,0,.4);
+}
+
+header h1 {
+    margin: 0;
+    color: #e10600;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    text-shadow: 0 0 20px #e10600;
+}
+
+nav {
+    margin-top: 10px;
+    display: none;
+}
+
+nav button {
+    background: transparent;
+    border: 1px solid #e10600;
+    color: #e10600;
+    padding: 8px 16px;
+    margin: 4px;
+    cursor: pointer;
+    border-radius: 6px;
+    font-weight: bold;
+    transition: .25s;
+}
+
+nav button:hover {
+    background: #e10600;
+    color: #000;
+}
+
+/* MAIN */
+main {
+    max-width: 1100px;
+    margin: auto;
+    padding: 40px 25px;
+}
+
+.page { display: none; }
+.page.active { display: block; }
+
+/* AUTH */
+.auth-box {
+    max-width: 420px;
+    margin: 80px auto;
+    background: #050505;
+    padding: 30px;
+    border-radius: 12px;
+    box-shadow: 0 0 30px rgba(225,6,0,.4);
+}
+
+.auth-box h2 {
+    text-align: center;
+    color: #e10600;
+}
+
+.auth-box input {
+    width: 100%;
+    padding: 10px;
+    margin: 10px 0;
+    background: #0b0b0b;
+    border: 1px solid #333;
+    color: #fff;
+    border-radius: 6px;
+}
+
+.auth-box button {
+    width: 100%;
+    padding: 12px;
+    background: #e10600;
+    border: none;
+    color: #000;
+    font-weight: bold;
+    border-radius: 6px;
+    cursor: pointer;
+}
+
+.auth-box button:hover {
+    background: #ff1a1a;
+}
+
+/* CONTENT */
+h2 { color: #e10600; }
+
+.cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px,1fr));
+    gap: 25px;
+    margin-top: 25px;
+}
+
+.card {
+    background: linear-gradient(180deg,#0f0f0f,#050505);
+    padding: 22px;
+    border-radius: 12px;
+    transition: .25s;
+}
+
+.card:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 0 30px rgba(225,6,0,.6);
+}
+
+.card h3 { color: #ff1a1a; }
+.card p { color: #ccc; }
+
+/* BUY BUTTON */
+.buy-btn {
+    display: inline-block;
+    margin-top: 15px;
+    padding: 10px 18px;
+    background: #1a1a1a;
+    color: #fff;
+    font-weight: bold;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: .25s;
+}
+
+.buy-btn:hover {
+    background: #00ff66;
+    color: #000;
+    box-shadow: 0 0 25px #00ff66;
+}
+
+/* FOOTER */
+footer {
+    text-align: center;
+    padding: 18px;
+    background: #000;
+    color: #777;
+    margin-top: 50px;
+}
+</style>
+</head>
+
+<body>
+
+<header>
+    <h1>binwest</h1>
+    <nav id="nav">
+        <button onclick="openPage('home')">Главная</button>
+        <button onclick="openPage('rage')">Rage MP</button>
+        <button onclick="openPage('altv')">Alt:V</button>
+    </nav>
+</header>
+
+<main>
+
+<!-- LOGIN -->
+<div id="login" class="page">
+    <div class="auth-box">
+        <h2>Login</h2>
+        <input id="loginUser" placeholder="Username">
+        <input id="loginPass" type="password" placeholder="Password">
+        <button onclick="login()">Login</button>
+        <p style="text-align:center;margin-top:10px;">
+            <a href="#" onclick="openPage('register')" style="color:#e10600">Register</a>
+        </p>
+    </div>
+</div>
+
+<!-- REGISTER -->
+<div id="register" class="page">
+    <div class="auth-box">
+        <h2>Register</h2>
+        <input id="regUser" placeholder="Username">
+        <input id="regPass" type="password" placeholder="Password">
+        <button onclick="register()">Create account</button>
+    </div>
+</div>
+
+<!-- HOME -->
+<div id="home" class="page">
+    <h2>Scripts Marketplace</h2>
+    <p>Private Rage MP & Alt:V scripts</p>
+</div>
+
+<!-- RAGE -->
+<div id="rage" class="page">
+    <h2>Rage MP Scripts</h2>
+    <div class="cards">
+        <div class="card">
+            <h3>Visual</h3>
+            <p>Price: $10</p>
+            <div class="buy-btn" onclick="buy('Visual')">Buy</div>
+        </div>
+        <div class="card">
+            <h3>Trigger</h3>
+            <p>Price: $5</p>
+            <div class="buy-btn" onclick="buy('Trigger')">Buy</div>
+        </div>
+    </div>
+</div>
+
+<!-- ALTV -->
+<div id="altv" class="page">
+    <h2>Alt:V Scripts</h2>
+    <div class="cards">
+        <div class="card">
+            <h3>Coming Soon</h3>
+        </div>
+    </div>
+</div>
+
+</main>
+
+
+
+<script>
+const PRICE = 30;
+
+/* NAV */
+function openPage(id){
+    document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+    document.getElementById(id).classList.add('active');
+}
+
+/* AUTH */
+function register(){
+    if(!regUser.value || !regPass.value)
+        return alert("Заполни все поля");
+
+    localStorage.setItem("user", regUser.value);
+    localStorage.setItem("pass", regPass.value);
+    alert("Аккаунт создан");
+    openPage("login");
+}
+
+function login(){
+    if(
+        loginUser.value === localStorage.getItem("user") &&
+        loginPass.value === localStorage.getItem("pass")
+    ){
+        localStorage.setItem("auth","true");
+        startSite();
+    } else {
+        alert("Неверный логин или пароль");
+    }
+}
+
+function startSite(){
+    nav.style.display = "block";
+    openPage("home");
+}
+
+/* FAKE PAYMENT */
+function buy(name){
+    window.open(
+        "https://youtu.be/5qOZq4T4KMk",
+        "_blank"
+    );
+}
+
+
+/* AUTO LOGIN */
+if(localStorage.getItem("auth")==="true"){
+    startSite();
+}else{
+    openPage("login");
+}
+</script>
+
+</body>
+</html>
